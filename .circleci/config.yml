@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  terraform:
+    working_directory: ~/repo/work/
+    docker:
+      - image: hashicorp/terraform:1.1.7
+    steps:
+      - checkout
+      - run:
+          name: "terraform init"
+          command: |
+              cd ~/repo/work/
+              terraform init
+      - run:
+          name: "terraform fmt"
+          command: |
+            terraform fmt -diff=true -check=true
+      - run:
+          name: "terraform validate"
+          command: |
+            terraform validate
+
+workflows:
+  version: 2
+  terraform:
+    jobs:
+      - terraform
